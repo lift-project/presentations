@@ -31,6 +31,10 @@ Slides of presentations about the Lift language
 
   [The lift Project: Performance Portability via Rewrite Rules](https://github.com/lift-project/presentations/blob/master/2016/SaarlandUniversity-2016.pdf)
 
+- Quick-Fire Research Presentation at the [ICSA Sessions](http://homepages.inf.ed.ac.uk/mic/ICSASessions/), 21/04/1016
+
+  [*Expressing Optimisations as Rewrites*](https://github.com/lift-project/presentations/blob/master/2016/ICSA-2016.pdf)
+
 - Talk at the [Annual Workshop on General Purpose Processing using Graphics Processing Units (GPGPU) 2016](http://conf.researchr.org/track/PPoPP-2016/GPGPU-2016-papers) in Barcelona, Spain, 12/03/2016
 
   [*Performance Portable GPU Code Generation for Matrix Multiplication*](https://github.com/lift-project/presentations/blob/master/2016/GPGPU-2016.pdf)
