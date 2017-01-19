@@ -13,7 +13,7 @@ Slides of presentations about the Lift language
 
   [*The Lift Project: Performance Portable GPU Code Generation via Rewrite Rules*](https://github.com/michel-steuwer/talks/blob/master/2016/Cambridge-2016.pdf)
 
-- Talk at the [International Conference on Compilers, Architectures and Synthesis for Embedded Systems (CASES) 2016 in Pittsburgh, USA](), 04/10/2016
+- Talk at the [International Conference on Compilers, Architectures and Synthesis for Embedded Systems (CASES) 2016](http://www.esweek.org/cases/about) in Pittsburgh, USA, 04/10/2016
 
   [*Matrix Multiplication Beyond Auto-Tuning: Rewrite Based GPU Code Generation*](https://github.com/lift-project/presentations/blob/master/2016/CASES-2016.pdf)
 
@@ -31,7 +31,7 @@ Slides of presentations about the Lift language
 
   [The lift Project: Performance Portability via Rewrite Rules](https://github.com/michel-steuwer/talks/blob/master/2016/SaarlandUniversity-2016.pdf)
 
-- Talk at the [](http://conf.researchr.org/track/PPoPP-2016/GPGPU-2016-papers), 12/03/2016
+- Talk at the [Annual Workshop on General Purpose Processing using Graphics Processing Units (GPGPU) 2016](http://conf.researchr.org/track/PPoPP-2016/GPGPU-2016-papers) in Barcelona, Spain, 12/03/2016
 
   [*Performance Portable GPU Code Generation for Matrix Multiplication*](https://github.com/lift-project/presentations/blob/master/2016/GPGPU-2016.pdf)
 
@@ -45,14 +45,14 @@ Slides of presentations about the Lift language
 	
 	[*Domain Specific Languages and rewriting-based optimisations for performance-portable parallel programming*](https://github.com/michel-steuwer/talks/blob/master/2015/EPLGuestLecture-2015.pdf)
 
-- Talk at the [Programming Language Interest Group at Edinburgh University](https://www.wiki.ed.ac.uk/display/prolan/Programming+Languages+Interest+Group), 19/10/2015
+- Talk at the [Programming Language Interest Group](https://www.wiki.ed.ac.uk/display/prolan/Programming+Languages+Interest+Group) at the University of Edinburgh, 19/10/2015
 
   [*A Functional Approach to Performance Portable GPU Code Generation: A Case Study on Matrix Multiplication*](https://github.com/lift-project/presentations/blob/master/2015/PLInG-2015.pdf)
 
-- Talk at the [International Conference on Functional Programming (ICFP) 2015 in Vancouver, Canada](http://icfpconference.org/icfp2015/), 01/09/2015
+- Talk at the [International Conference on Functional Programming (ICFP) 2015](http://icfpconference.org/icfp2015/) in Vancouver, Canada, 01/09/2015
 
   [*Generating Performance Portable Code using Rewrite Rules: From High-level Functional Expressions to High-Performance OpenCL Code*](https://github.com/michel-steuwer/talks/blob/master/2015/ICFP-2015.pdf)
 
-- Talk at the [Scottish Programming Language Seminar at the University of St. Andrews](https://ff32.host.cs.st-andrews.ac.uk/spls/), 15/06/2015
+- Talk at the [Scottish Programming Language Seminar](https://ff32.host.cs.st-andrews.ac.uk/spls/) at the University of St. Andrews, 15/06/2015
 
   [*Generating Performance Portable Code using Rewrite Rules*](https://github.com/michel-steuwer/talks/blob/master/2015/SPLS-2015.pdf)
