@@ -1,2 +1,2 @@
 # Presentations
-Slieds of presentations about the Lift language
+Slides of presentations about the Lift language
