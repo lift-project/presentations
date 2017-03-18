@@ -3,7 +3,7 @@ Slides of presentations about the Lift language
 
 ## 2017
 
-- Talk by _Michel Steuwer_ at the [International Symposium on Code Generationand Optimization](http://cgo.org/cgo2017/) in Austin, USA, 06/02/2017
+- Talk by _Michel Steuwer_ at the [International Symposium on Code Generation and Optimization (CGO) 2017](http://cgo.org/cgo2017/) in Austin, USA, 06/02/2017
 
  [*LIFT: A Functional Data-Parallel IR for High-Performance GPU Code Generation*](https://github.com/lift-project/presentations/blob/master/2017/CGO-2017.pdf)
 
