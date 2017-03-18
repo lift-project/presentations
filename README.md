@@ -3,6 +3,10 @@ Slides of presentations about the Lift language
 
 ## 2017
 
+- Talk by _Michel Steuwer_ at the [International Symposium on Code Generationand Optimization](http://cgo.org/cgo2017/) in Austin, USA, 06/02/2017
+
+ [*LIFT: A Functional Data-Parallel IR for High-Performance GPU Code Generation*](https://github.com/lift-project/presentations/blob/master/2017/CGO-2017.pdf)
+
 - Lightning Talk by _Michel Steuwer_ at the [MaRIONet](http://manycore.org.uk/) launch meeting at Imperial College, 11/01/2017
 
   [*The Lift Project: Where High-Level Programming Meets Performance Portability*](https://github.com/lift-project/presentations/blob/master/2017/MaRIONet-launch-2017.pdf)
