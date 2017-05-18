@@ -3,6 +3,8 @@ Slides of presentations about the Lift language
 
 ## 2017
 
+- Invited Talk by _Bastian Hagedorn_: [**Performance Portable Stencil Code Generation in LIFT**](http://www.lift-project.org/presentations/2017/CArD-2017.pdf), at the *[Compiler and Architecture Design Group](http://www.icsa.informatics.ed.ac.uk/compilers/) at the University of Edinburgh*, UK, 21/03/2017.
+
 - Talk by _Michel Steuwer_: [**LIFT: A Functional Data-Parallel IR for High-Performance GPU Code Generation**](http://www.lift-project.org/presentations/2017/CGO-2017.pdf), at the [*International Symposium on Code Generation and Optimization (CGO) 2017*](http://cgo.org/cgo2017/) in Austin, USA, 06/02/2017.
 
 - Lightning Talk by _Michel Steuwer_: [**The Lift Project: Where High-Level Programming Meets Performance Portability**](http://www.lift-project.org/presentations/2017/MaRIONet-launch-2017.pdf), at the *[MaRIONet](http://manycore.org.uk/) launch meeting at Imperial College*, UK, 11/01/2017.
