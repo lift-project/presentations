@@ -5,6 +5,8 @@ Slides of presentations about the Lift language
 
 - Talk by _Larisa Stoltzfus_: [**Performance, Portability and Productivity for 3D Wave Models**](http://www.lift-project.org/presentations/2017/StoltzfusPParShowcase2017.pdf), at the *[PPar Student Showcase Event](http://pervasiveparallelism.inf.ed.ac.uk/events/) at the University of Edinburgh*, UK, 14/06/2017.
 
+- Talk by _Naums Mogers_: [**Optimization of neural computations using a functional data-parallel language**](http://www.lift-project.org/presentations/2017/MogersPPar2017.pdf), at the *[PPar Student Showcase Event](http://pervasiveparallelism.inf.ed.ac.uk/events/) at the University of Edinburgh*, UK, 14/06/2017.
+
 - Invited Talk by _Bastian Hagedorn_: [**Performance Portable Stencil Code Generation in LIFT**](http://www.lift-project.org/presentations/2017/CArD-2017.pdf), at the *[Compiler and Architecture Design Group](http://www.icsa.informatics.ed.ac.uk/compilers/) at the University of Edinburgh*, UK, 21/03/2017.
 
 - Talk by _Michel Steuwer_: [**LIFT: A Functional Data-Parallel IR for High-Performance GPU Code Generation**](http://www.lift-project.org/presentations/2017/CGO-2017.pdf), at the [*International Symposium on Code Generation and Optimization (CGO) 2017*](http://cgo.org/cgo2017/) in Austin, USA, 06/02/2017.
@@ -14,6 +16,8 @@ Slides of presentations about the Lift language
 ## 2016
 
 - Invited Talk by _Michel Steuwer_: [**The Lift Project: Performance Portable GPU Code Generation via Rewrite Rules**](http://www.lift-project.org/presentations/2016/Cambridge-2016.pdf), at the *[Computer Laboratory Systems Research Group](https://www.cl.cam.ac.uk/research/srg/) at the University of Cambridge*, UK, 09/12/2016.
+
+- Talk by _Naums Mogers_: [**Optimization of neural computations in a functional data-parallel language**](http://www.lift-project.org/presentations/2016/MogersPERP2016.pdf), for the *Pervasive Parallelism course at the University of Edinburgh*, UK, 29/11/2016.
 
 - Talk by _Toomas Remmelg_: [**Matrix Multiplication Beyond Auto-Tuning: Rewrite Based GPU Code Generation**](http://www.lift-project.org/presentations/2016/CASES-2016.pdf), at the [*International Conference on Compilers, Architectures and Synthesis for Embedded Systems (CASES) 2016*](http://www.esweek.org/cases/about) in Pittsburgh, USA, 04/10/2016.
 
