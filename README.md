@@ -1,6 +1,10 @@
 # Presentations
 Slides of presentations about the Lift language
 
+## 2018
+
+- Talk by _Bastian Hagedorn_: [**High Performance Stencil Code Generation with Lift**](http://www.lift-project.org/presentations/2018/CGO-2018.pdf), at the [*International Symposium on Code Generation and Optimization (CGO) 2017*](http://cgo.org/cgo2018/) in Vienna, Austria, 26/02/2018.
+
 ## 2017
 
 - Talk by _Larisa Stoltzfus_: [**Performance, Portability and Productivity for 3D Wave Models**](http://www.lift-project.org/presentations/2017/StoltzfusPParShowcase2017.pdf), at the *[PPar Student Showcase Event](http://pervasiveparallelism.inf.ed.ac.uk/events/) at the University of Edinburgh*, UK, 14/06/2017.
