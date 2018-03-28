@@ -1,0 +1,402 @@
+\documentclass[10pt]{beamer}
+
+\usetheme{metropolis}
+\metroset{background=dark}
+\usepackage{appendixnumberbeamer}
+\usepackage{tikz}
+\usepackage{fontawesome}
+\usetikzlibrary{positioning}
+\definecolor{cobaltBlue}{HTML}{38ACEC}
+\setbeamercolor{alerted text}{fg=cobaltBlue}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+
+\newcommand{\lift}{\textsc{lift}\space}
+
+%\setbeamercolor*{structure}{bg=black,fg=white}
+\title{A Modular Approach to\\ Performance, Portability and Productivity\\ for 3D Wave Models}
+\subtitle{Using Lift}
+\date{}
+\author{Larisa Stoltzfus}
+\institute{WOLFHPC 2017}
+%\titlegraphic{\hfill\includegraphics[height=2cm]{../images/soundwaves.png}}
+
+\begin{document}
+
+\begin{frame}[plain,noframenumbering]
+\maketitle
+\begin{tikzpicture}[overlay, remember picture]
+    \node[above right=1cm and 4cm of current page.south west] {\includegraphics[width=3cm]{../images/epsrc.png}};
+    \node[above left=1cm and .5cm of current page.south east] {\includegraphics[width=5cm]{../images/informatics.png}};
+\end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Table of contents}
+  \setbeamertemplate{section in toc}[sections numbered]
+  \tableofcontents[hideallsubsections]
+\end{frame}
+
+\section{Introduction}
+
+\begin{frame}
+\frametitle{The Problem}
+\begin{itemize}
+    \item The parallel programming landscape is becoming more complex and less portable
+    \item Computational scientists should not have to be HPC experts 
+    \item Re-writing and re-tuning codes to take advantage of emerging, more performant platforms is tedious
+\end{itemize}
+\vspace{-1.5cm}
+\begin{block}{}
+\includegraphics[width=\textwidth]{../images/zoo.pdf}
+\end{block}
+\end{frame}
+
+\begin{frame}{The Context: 3D Wave Models}
+% Split this slide  ? 
+    3D wave-based simulations discretised using finite difference methods are an important tool for understanding the world around us, but are complicated to model and can be even more difficult to abstract about 
+        \begin{center}
+            \begin{columns}
+    \begin{column}{.3\textwidth}
+        \begin{block}{}
+            %\hspace{-.03cm}
+            \includegraphics[width=3.8cm, height=2.5cm]{../images/soundwaves.png}
+        \end{block}
+        \end{column}
+        \begin{column}{.3\textwidth}
+            \LARGE\begin{equation*}\frac{\partial^2 \Psi}{\partial t^2} = c^2\nabla^2 \Psi\end{equation*}
+           % \begin{block}{}
+           %     % Your text here
+           % \end{block}
+        \end{column}
+    \begin{column}{.3\textwidth}
+        {
+            \setbeamercolor{block body}{bg=white}
+        \begin{block}{}
+            %\hspace{-.03cm}
+            \includegraphics[width=.95\textwidth]{../images/stencil.pdf}
+        \end{block}
+    }
+        \end{column}
+    \end{columns}
+\end{center}
+\end{frame}
+
+
+\begin{frame}{Our Goal}
+
+    \begin{center}    \includegraphics[width=.75\textwidth]{../images/PPP.png}\\
+
+    Develop parallel, performant, portable, productive solutions for 3D wave model simulations \end{center}
+
+\end{frame}
+
+\begin{frame}{Current Status}
+    \begin{center}We pose the question:\\ 
+    \textbf{DSLs are great for raising the level of abstraction, but do they try to do too much?}\end{center}
+
+    In addition, many rely on heuristics, are tied to specific platforms or are only useful for niche fields
+    
+    For stencils, the issue of complicated boundary conditions - like absorbing ones found in room acoustics simulations and GPR - are often side-stepped or ignored completely 
+    
+\end{frame}
+
+
+\begin{frame}{Our Approach}
+
+    Our goal is to extend and couple an existing stencil DSL to the \lift framework for use with 3D wave models:
+
+    \begin{itemize}
+        \item DSLs are good at raising abstraction levels and improving productivity
+        \item \lift is good at handling the low-level optimisations and porting
+    \end{itemize}
+
+    \begin{center}\includegraphics[width=.95\textwidth]{../images/DSLplusLift.png}\end{center}
+
+\end{frame}
+
+\section{The Lift Language and Compiler}
+
+\begin{frame}{What is Lift?}
+    \begin{columns}[T]
+        \begin{column}{.5\textwidth}
+            \begin{block}{}
+                % Your text here
+                \lift  is a language and a compiler designed to compile DSLs into 
+
+
+                It is designed in a modular way, reusing functionality across application domain
+
+                Currently only OpenCL is supported, but we are looking to add other backends 
+            \end{block}
+        \end{column}
+    \begin{column}{.5\textwidth}
+        {
+            \setbeamercolor{block body}{bg=white}
+        \begin{block}{}
+            %\hspace{-.03cm}
+            \includegraphics[width=.95\textwidth]{../images/liftOverview.pdf}
+        \end{block}
+    }
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+
+\begin{frame}{How Does Lift Work?}
+\begin{enumerate}
+    \item Functional, reusable ``high-level'' algorithmic primitives  
+    \item Rewrite rules  which describe exchangeable relationships between compositions of primitives 
+    \item A code generating search space to determine the best version of a kernel to run on a particular platform 
+\end{enumerate}
+\end{frame}
+
+
+%\begin{frame}{Algorithmic Primitives}
+%
+%  \begin{table}
+%%    \begin{tabular}{@{} lcr @{}}
+%     \begin{tabular}{@{} lcr @{}}
+%      \toprule
+%      \textbf{Primitive} & \textbf{Input} & \textbf{Output} \\
+%      \midrule
+%      \textit{Map(f,x)}  & [x_{1},x_{2},x_{3},x_{4}] & [f(x_{1}),f(x_{2}),f(x_{3}),f(x_{4})] \\
+%      \textit{Reduce(*,1,x)} & [x_{1},x_{2},x_{3},x_{4},x_{5},x_{6}] & x_{1}*x_{2}*x_{3}*x_{4}*x_{5}*x_{6} \\
+%       \textit{Zip(x,y)} & [x_{1},x_{2},x_{3}],[y_{1},y_{2},y_{3}] & [(x_{1},y_{1}),(x_{2},y_{2}),(x_{3},y_{3})]\\ 
+%       \textit{Join(x)} & [(x_{1},x_{2}),(x_{3},x_{4}),(x_{5},x_{6})] & [x_{1},x_{2},x_{3},x_{4},x_{5},x_{6}]  \\
+%       \textit{Split(2,x)} & [x_{1},x_{2},x_{3},x_{4},x_{5},x_{6}] & [(x_{1},x_{2}),(x_{3},x_{4}),(x_{5},x_{6})] \\
+%      \bottomrule
+%    \end{tabular}
+%  \end{table}
+%  \begin{center}  Applications can be rewritten as compositions of primitives, a selection of which are shown above \end{center}
+%\end{frame}
+
+\begin{frame}{Rewrite Rules}
+  \begin{table}
+    \begin{tabular}{@{} lccl @{}}
+      \toprule
+      \midrule
+      \small\textbf{Split-Join} &\textit{map(f)}&$\rightarrow$ & \textit{join $\circ$  map ( map(f) ) $\circ$ split(n) }\\
+%      \small\textbf{Map-Fusion} &\textit{map(f) $\circ$ map(g)}& \rightarrow & \textit{map( f $\circ$ g )}\\
+%      \small\textbf{Divide-and-Conquer} &\textit{map(f)} & \rightarrow & \textit{join ( map ( map(f), split(n) )} 
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  \begin{center}Rewrite rules describe transformations of the same algorithm which can be interchanged \\
+      \vspace{.05cm}
+  Algorithm performance varies using different rules across platforms\end{center}
+\end{frame}
+
+\begin{frame}{Optimising Search Space}
+
+    \begin{block}{}
+        \begin{center}\includegraphics[width=.5\textwidth]{../images/rewrite_cloud.png}\end{center}
+\end{block}
+By automatically searching across a space of optimisations, a best version of a kernel can be found for a particular platform
+\end{frame}
+
+\begin{frame}{What Lift Is *Not*}
+
+
+    \lift is not just another stencil focused solution, it is intended to target a wide range of applications  
+
+    While \lift is still relatively ``high-level,'' it is not intended to be written in directly, it is intended to be an IR language for HPC
+
+    Though all our results shown are on GPUs, \lift is not just limited to GPUs or OpenCL - it is written to be composable with any parallel backend
+
+\end{frame}
+\section{Stencils in Lift}
+\begin{frame}{Compiling Stencils in Lift}
+Developing stencils in Lift requires three considerations
+\begin{enumerate}
+    \item Creating neighbourhoods or the ``stencil shape''  
+    \item Handling boundary conditions 
+    \item Calculating the stencil 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Slide Primitive}
+--- Picture of Slide Primitive---\\ 
+      \vspace{1cm}
+Slide takes in two parameters: \textit{step} and \textit{size} and produces a \textit{neighbourhood} of points of a given size with \textit{step} definining the overlap
+\end{frame}
+
+\begin{frame}{Pad Primitive}
+--- Picture of Pad Primitive--- \\
+      \vspace{1cm}
+Pad takes in two values and a function. The values define how much to ``pad'' the array and the function determines where that value comes from (ie. mirror, clamp)
+\end{frame}
+
+\begin{frame}{Calculating the Stencil}
+--- Picture of Stencil neighbourhood getting mapped over--- \\
+      \vspace{1cm}
+(Example using map)\\
+      \vspace{1cm}
+Stencils are essentially a sum of certain neighbours around a point, thus map is used to define how to sum
+\end{frame}
+
+\begin{frame}{Results of Stencils in the Lift Framework}
+\includegraphics[width=\textwidth]{../images/handwritten.pdf}\\
+\vspace{.05cm}
+\includegraphics[width=\textwidth]{../images/ppcg.pdf}\\
+Experiments show that we can get good performance from \lift for stencils
+\footnote[frame]{\textit{Hagedorn, Stoltzfus, Steuwer, Gorlatch and Dubach}: ``High Performance Stencil Code Generation with Lift.'' CGO 2018. }
+\end{frame}
+
+\section{3D Wave Models in Lift}
+
+\begin{frame}{Accommodating 3D Wave Model Stencils in Lift}
+    Existing stencil functionality in \lift was not enough to accommodate simple room acoustic simulations \\
+    \vspace{.08cm}
+    The following additions were required: 
+\begin{enumerate}
+    \item Update neighbourhood functionality for non-cuboid stencil shapes 
+    \item Develop method for handling constant boundary conditions 
+\end{enumerate}
+\end{frame}
+
+\begin{frame}{Stencil Shape}
+\begin{block}{}
+--- Picture of At Primitive--- \\
+      \vspace{1cm}
+%\includegraphics[width=\textwidth]{../images/stencilshape.pdf}
+\end{block}
+The \textit{at} primitive allows for different shapes of stencils to be calculated
+\end{frame}
+
+\begin{frame}{Constant Boundary Handling}
+\begin{block}{}
+--- Picture of Boundary Handling--- \\
+      \vspace{1cm}
+%\includegraphics[width=\textwidth]{../images/boundary.pdf}
+\end{block}
+Because the \textit{pad} primitive does not allow for constants, we must work around this using pre-padded halos and masks\\
+The \textit{arrayOnTheFly} primitive allows for masks to be created on-the-fly instead of having to be passed in as separate parameters 
+\end{frame}
+
+\begin{frame}{Results of Updates for a Simple Room Acoustics Simulation}
+\begin{block}{}
+    \vspace{-.9cm}
+    \begin{center} \includegraphics[width=.9\textwidth, height=.7\textheight]{../images/liftVersionsComparison512.pdf}\end{center}
+\end{block}
+We can achieve comparable performance to unoptimised benchmarks, but we still lag behind optimised ones
+\end{frame}
+
+
+\begin{frame}{Adding 2.5D Tiling to Lift}
+    \begin{columns}[T]
+        \begin{column}{.5\textwidth}
+            \begin{block}{}
+  Original room codes use a ``2.5D Tiling'' optimisation to achieve faster results in conjunction with local memory\\
+  \vspace{.08cm}
+This optimisation works by running two dimensions in parallel and the third dimension sequentially and reusing blocks of memory 
+            \end{block}
+        \end{column}
+    \begin{column}{.5\textwidth}
+        {
+            \setbeamercolor{block body}{bg=white}
+        \begin{block}{}
+            %\hspace{-.03cm}
+            \includegraphics[width=.95\textwidth]{../images/twoPointFiveDView.pdf}
+        \end{block}
+    }
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+%{
+%\setbeamercolor{block body}{bg=white}
+%\begin{frame}{Adding 2.5D Tiling to Lift}
+%    \vspace{-.05cm}
+%    \begin{varblock}[10cm]{}
+%    \begin{center}\includegraphics[width=.5\textwidth]{../images/twoPointFiveDView.pdf}\end{center}
+%\end{varblock}
+%Original room codes use a ``2.5D Tiling'' optimisation to achieve faster results in conjunction with local memory.
+%\end{frame}
+%}
+
+
+\begin{frame}{2.5D Tiling Primitive}
+\begin{block}{}
+--- Attempt a picture of MapSeqSlide primitive --- \\
+      \vspace{1cm}
+\end{block}
+Using a \textit{Map} conjoined with a sequential \textit{Slide}, we are able create a reasonable implementation of the 2.5D Tiling optimisation for Jacobi stencils, but more work is needed for this to work performantly and for 3D wave models\\ 
+\vspace{.2cm}
+The end goal will be to use this as a \textit{rewrite rule} for 3D stencils as its utility varies greatly  with cube dimensions and platforms 
+\end{frame}
+
+\section{Next Steps}
+
+\begin{frame}{Absorbing Boundary Conditions}
+\begin{block}{}
+--- Picture of Absorbing BC--- \\
+      \vspace{1cm}
+%\includegraphics[width=\textwidth]{../images/twoPointFiveDPrimitive.pdf}
+\end{block}
+Currently, \lift can support constant boundary conditions, but absorbing boundary conditions are much more complicated and require the memory of states
+\end{frame}
+
+\begin{frame}{Extending to GPR}
+\begin{block}{}
+%\includegraphics[width=\textwidth]{../images/twoPointFiveDPrimitive.pdf}
+--- Picture of Absorbing GPR--- \\
+      \vspace{1cm}
+\end{block}
+Ground Penetrating Radar simulations are another type of 3D wave model \\
+\vspace{.2cm}
+However, they use two 9D stencils with absorbing boundary conditions
+\end{frame}
+
+\begin{frame}{Couple Stencil DSL to Lift}
+\begin{block}{}
+--- Some kind of visual --- \\
+      \vspace{1cm}
+%\includegraphics[width=\textwidth]{../images/twoPointFiveDPrimitive.pdf}
+\end{block}
+So far \lift has not been used in conjunction with another DSL, we would like to test this out for 3D wave models by extending an existing DSL to work with these simulations as well as compile into \lift
+\end{frame}
+%%
+%  Some references to showcase [allowframebreaks] \cite{knuth92,ConcreteMath,Simpson,Er01,greenwade93}
+
+\section{Conclusion}
+
+\begin{frame}{Recap}
+
+    \begin{itemize}
+        \item Providing performance, portability and productivity for 3D wave models and other physical simulations is still a problem
+        \item By combining the strengths of \lift and existing DSLs, we could tackle this problem in a modular way
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}[standout]
+    \LARGE{Questions?}\\
+    \vspace{1.5cm}
+    \normalsize \faGithub \hspace{.05cm} \textbf{\url{https://github.com/lift-project/lift}}\\
+  \faTwitter \hspace{.05cm} @LIFTlang\\
+ lift-project.org
+\end{frame}
+
+\appendix
+%\begin{frame}[fragile]{Multi-Dimensional Stencils}
+
+%    --- Stuff about how multi-dimensional stencils work ---- 
+
+
+%\end{frame}
+
+\begin{frame}{References}
+
+  \bibliography{demo}
+  \bibliographystyle{abbrv}
+
+\end{frame}
+
+\end{document}
