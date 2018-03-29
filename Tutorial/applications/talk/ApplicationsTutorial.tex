@@ -217,20 +217,34 @@ However, functionality for new types of algorithms must be added in and tested. 
 \section{Detailed Example: Convolutional Neural Network }
 
 \begin{frame}
-\frametitle{Convolutional Neural Network Overview}
-\vspace{.2cm}
-\begin{itemize}
-    \item 
-\end{itemize}
+\frametitle{Convolutional Neural Network -- Overview}
+\vspace{-.5cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=0.8\textwidth]{../images/conv.pdf}
+        \end{center}
+    \end{block}
 \vspace{-1.2cm}
 \end{frame}
 
-\begin{frame}{Convolutional Neural Network Example Code}
-        \begin{block}{}
+\begin{frame}{Convolutional Neural Network -- Parallel Implementation}
+\vspace{-1.5cm}
+    \begin{block}{}
         \begin{center}
-            \includegraphics[width=.5\textwidth]{../images/simpleCompile.png}
+            \includegraphics[width=0.8\textwidth]{../images/conv_expr_par.pdf}
         \end{center}
-        \end{block}
+    \end{block}
+\vspace{-1.2cm}
+\end{frame}
+
+\begin{frame}{Convolutional Neural Network -- OpenCL ND space}
+\vspace{-1.5cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=0.7\textwidth]{../images/conv_nd.pdf}
+        \end{center}
+    \end{block}
+\vspace{-1.2cm}
 \end{frame}
 
 \section{Detailed Example: Acoustics Simulation }
