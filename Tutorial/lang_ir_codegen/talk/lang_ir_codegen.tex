@@ -1,0 +1,314 @@
+\documentclass[10pt]{beamer}
+
+\usetheme{metropolis}
+%\metroset{background=dark}
+%\usepackage{appendixnumberbeamer}
+\usepackage{tikz}
+\usepackage{fontawesome}
+\usetikzlibrary{positioning}
+\definecolor{cobaltBlue}{HTML}{38ACEC}
+%\setbeamercolor{alerted text}{fg=cobaltBlue}
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+
+\newcommand{\lift}{\textsc{lift}\space}
+\newcommand{\srcurl}[1]{\textcolor{blue}{\textit{#1}}}
+\newcommand{\code}[1]{\textbf{\texttt{#1}}}
+
+%\setbeamercolor*{structure}{bg=black,fg=white}
+
+
+\title{Lift: The Language, The IR and Code Generation}
+\date{April 2nd, 2018}
+\author{\textbf{Naums Mogers}\\Based on (Steuwer, Remmelg, Dubach, 2017)}
+\institute{University of Edinburgh}
+
+\begin{document}
+
+\begin{frame}[plain,noframenumbering]
+\maketitle
+\end{frame}
+
+\section{\lift -- An Intermediate Language}
+\begin{frame}
+\frametitle{Algorithmic Patterns}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.85\textwidth]{../images/algorithmic_patterns.pdf}
+        \end{center}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Data Layout Patterns}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.85\textwidth]{../images/data_layout_patterns1.pdf}
+        \end{center}
+    \end{block}
+\begin{itemize}
+	\item Do not perform any computation
+	\item Reorganize the data layout (\code{View})
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Data Layout Patterns}
+    \vspace{-.5cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.85\textwidth]{../images/data_layout_patterns2.pdf}
+        \end{center}
+        \vspace{-.5cm}
+        \begin{center}
+            \includegraphics[width=.85\textwidth]{../images/gather.png}
+        \end{center}
+    \end{block}
+    \vspace{-.5cm}
+\begin{center}
+	For examples of \code{Gather} and \code{Scatter} indexing functions, see \srcurl{src/main/ir/ast/package.scala}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Data Layout Patterns}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.55\textwidth]{../images/data_layout_patterns3.pdf}
+        \end{center}
+        \begin{center}
+            \includegraphics[width=.85\textwidth]{../images/data_layout_patterns4.pdf}
+        \end{center}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Parallel Patterns}
+\begin{columns}[onlytextwidth]
+\begin{column}{0.45\textwidth}
+\begin{itemize}
+	\item \code{mapWrg$^{0, 1, 2}$}
+	\item \code{mapLcl$^{0, 1, 2}$}
+	\item \code{mapGlb$^{0, 1, 2}$}
+\end{itemize}
+\end{column}
+\begin{column}{0.45\textwidth}
+\begin{itemize}	
+	\item \code{mapWarp}
+	\item \code{mapLane}
+\vspace{.5cm}
+	\item \code{mapAtomWrg}
+	\item \code{mapAtomLcl}
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Address Space Patterns}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.55\textwidth]{../images/address_space_patterns.pdf}
+        \end{center}
+        \begin{center}
+            \includegraphics[width=.55\textwidth]{../images/toLocal.png}
+        \end{center}
+    \end{block}
+\begin{itemize}
+    \item These primitives decouple the decision of \textit{where} to store data from the decision of \textit{how} the data is produced.
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Vectorize Pattern}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.85\textwidth]{../images/vectorize_pattern.pdf}
+        \end{center}
+    \end{block}
+\begin{itemize}
+    \item During code generation, the \lift compiler transforms \textit{f} into a vectorized form using OpenCL built-in vectorized arithmetic operations whenever possible.
+	\begin{itemize}
+	    \item In other cases, \textit{f} is applied to each scalar in the vector.
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Low-level IRs}
+All \lift primitives are either:
+\begin{itemize}
+	\item High-level, capturing rich information about the algorithmic structure of programs
+	\item Low-level and platform-specific (OpenCL, OpenCL for FPGAs, OpenMP, etc)
+\end{itemize}
+\end{frame}
+
+\section{\lift intermediate representation}
+
+\begin{frame}
+\frametitle{Class diagram}
+
+    \begin{columns}[onlytextwidth]
+\begin{column}{0.65\textwidth}
+    \vspace{-.5cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=\textwidth]{../images/class_diagram.pdf}
+        \end{center}
+    \end{block}
+\end{column}
+\begin{column}{0.35\textwidth}
+    \vspace{-.5cm}
+\begin{itemize}	
+	\item \code{Expressions} represent values and have a type associated with.
+\vspace{0.7cm}
+	\item \code{Function declarations} represent callable entities: lambdas, patterns and user functions.
+\end{itemize}
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}
+\frametitle{Dot product example}
+    \vspace{-.8cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.7\textwidth]{../images/dotProductLift2_expr.png}
+        \end{center}
+    \end{block}
+    \vspace{-.8cm}
+        \begin{center}
+    For more dot product variations, see \srcurl{src/test/tutorial/applications/DotProduct.scala}
+        \end{center}
+\end{frame}
+%Code
+
+\begin{frame}
+\frametitle{Corresponding AST}
+    \begin{block}{}
+    \vspace{-1cm}
+        \begin{center}
+            \includegraphics[width=.4\textwidth]{../images/dotProductLift2_ast.pdf}
+        \end{center}
+    \end{block}
+\end{frame}
+%image 
+
+\begin{frame}
+\frametitle{\lift type system}
+\begin{itemize}
+	\item Scalar types: \code{int}, \code{float}, etc
+	\item Vector types corresponding to OpenCL types \code{int2}, \code{float4}, etc
+	\item Tuples
+	\begin{itemize}
+		\item \textit{Represented as \code{structs} in the generated OpenCL code}
+	\end{itemize}
+	\item Arrays
+	\begin{itemize}
+		\item Can be nested
+		\item Carry information about the size and capacity of each dimension in their type
+		\item This information is represented by arithmetic expressions (more on this later)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\section{\lift compilation}
+
+\begin{frame}
+\frametitle{Compilation stages}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
+        \end{center}
+    \end{block}
+    \vspace{-0.5cm}
+\begin{itemize}
+    \item Compile: \srcurl{src/main/opencl/executor/Compile.scala:44}
+    \begin{itemize}
+    	\item Type checking: \srcurl{src/main/ir/TypeChecker.scala:39}
+    	\begin{itemize}
+    		\item Example Pattern.checkType(): \srcurl{src/main/opencl/ir/pattern/ReduceSeq.scala:11}
+    	\end{itemize}
+    	\item Generate: \srcurl{src/main/opencl/generator/OpenCLGenerator.scala:176}
+    	\begin{itemize}
+    		\item Memory address space inference: \srcurl{src/main/opencl/ir/InferOpenCLAddressSpace.scala:18}
+    		\item Domain-specific range inference: \srcurl{src/main/opencl/generator/RangesAndCounts.scala:26}
+    		\item Memory allocation: \srcurl{src/main/ir/Type.scala:559}
+    		\item Loop unrolling: \srcurl{src/main/opencl/generator/ShouldUnroll.scala:50}
+    		\item Barrier elimination: \srcurl{src/main/opencl/generator/BarrierElimination.scala:41}
+    		\item Views (array Accesses): \srcurl{src/main/ir/view/View.scala:585}
+    	\end{itemize}
+    \end{itemize}
+\end{itemize}
+\end{frame}
+% Code
+
+\begin{frame}
+\frametitle{Memory allocation}
+\begin{itemize}
+	\item The naive approach would be to allocate a new output buffer for every \code{FunCall} AST node
+	\item We only allocate memory to the nodes where the called function contains a \code{UserFun}
+	\item The size of the memory to allocate is inferred from the array length (or the associated \code{View})
+	\item The address space is inferred from \code{FunCall}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Memory allocation}
+    \vspace{-1cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=0.47\textwidth]{../images/address_space.pdf}
+        \end{center}
+    \end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Array accesses}
+\begin{itemize}
+	\item In \lift IR, arrays are accessed implicitly based on the patterns
+	\item This eliminates arbitrary memory accesses and the associated problems
+	\item However, expressing (efficient) pattern-transformed accesses is not obvious
+	\item ...which is where \code{Views} come to the rescue (but more on that later)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Barrier elimination}
+\begin{itemize}
+	\item We start by synchronizing after each occurrence of a parallel \code{Map}
+	\item Then we remove barriers one by one in cases when it can be inferred that they are not required
+	\begin{itemize}
+		\item When the data is not shared (i.e. \code{Split}, \code{Join}, \code{Gather} and \code{Scatter} are not used)
+		\item When the two parallel \code{Maps} are executed independently in separate branches of \code{Zip}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{OpenCL code generation}
+\begin{itemize}
+	\item The AST is traversed recursively
+	\item No OpenCL code is generated for the patterns that only affect \code{View}
+	\item Low-level optimizations such as loop unrolling are applied to simplify the control flow using the information on \textit{ranges} inferred from the patterns such as \code{mapLcl}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{References}
+\begin{itemize}
+	\item \texttt{Steuwer, Michel, Toomas Remmelg, and Christophe Dubach. "Lift: a functional data-parallel IR for high-performance GPU code generation." Code Generation and Optimization (CGO), 2017 IEEE/ACM International Symposium on. IEEE, 2017.}
+	\item \texttt{Steuwer, Michel, Toomas Remmelg, and Christophe Dubach. "Matrix multiplication beyond auto-tuning: Rewrite-based GPU code generation." Compliers, Architectures, and Sythesis of Embedded Systems (CASES), 2016 International Conference on. IEEE, 2016.}
+\end{itemize}
+\begin{center}
+\textcolor{blue}{\url{http://www.lift-project.org/}}
+\end{center}
+\end{frame}
+
+\end{document}
