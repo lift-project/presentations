@@ -43,7 +43,6 @@
                 \item If testing, initialise comparison data 
             \end{itemize}
     \item Craft or translate the algorithm of interest 
-    \item Determine what memory to use running the resulting kernel 
     \item Create an OpenCL kernel from your algorithm 
 \end{itemize}
 \end{frame}
@@ -51,10 +50,8 @@
 \begin{frame}
 \frametitle{Data Input to Lift Algorithms}
 \begin{itemize}
-    \item Lift takes in arrays as input parameters
-            \begin{itemize}
-                \item Single values can be passed in in array form or used as global values
-            \end{itemize}
+    \item Lift can take in arrays or scalars as input parameters
+            \vspace{-.4cm}
 \begin{block}{}
     \begin{center}
     \includegraphics[width=.5\textwidth]{../images/inputData.png}
@@ -87,7 +84,7 @@
         \vspace{-.5cm}
     \begin{block}{}
         \begin{center}
-            \includegraphics[width=.85\textwidth]{../images/unitTestData.png}
+            \includegraphics[width=.8\textwidth]{../images/unitTestData.png}
         \end{center}
     \end{block}
 \end{itemize}
@@ -115,52 +112,6 @@ However, functionality for new types of algorithms must be added in and tested. 
 \end{frame}
 
 \begin{frame}
-\frametitle{Memory Options}
-\begin{itemize}
-    \item There are a range of different OpenCL memories that can be targeted in an algorithm 
-        \begin{itemize}
-            \item MapGlb - use global memory
-            \item MapWrg - use workgroup memory
-            \item MapLcl - use local memory
-        \end{itemize}
-    \item Can parallelise up to 3 dimensions in OpenCL 
-        \vspace{-.5cm}
-    \begin{block}{}
-        \begin{center}
-            \includegraphics[width=.85\textwidth]{../images/mapMapMap.png}
-        \end{center}
-    \end{block}
-\end{itemize}
-
-%        \begin{center}
-%            \begin{columns}
-%    \begin{column}{.3\textwidth}
-%        \begin{block}{}
-%            %\hspace{-.03cm}
-%            \includegraphics[width=3.8cm, height=2.5cm]{../images/soundwaves.png}
-%        \end{block}
-%        \end{column}
-%        \begin{column}{.3\textwidth}
-%            \LARGE\begin{equation*}\frac{\partial^2 \Psi}{\partial t^2} = c^2\nabla^2 \Psi\end{equation*}
-%           % \begin{block}{}
-%           %     % Your text here
-%           % \end{block}
-%        \end{column}
-%    \begin{column}{.3\textwidth}
-%        {
-%            \setbeamercolor{block body}{bg=white}
-%        \begin{block}{}
-%            %\hspace{-.03cm}
-%            \includegraphics[width=.95\textwidth]{../images/stencil.pdf}
-%        \end{block}
-%    }
-%        \end{column}
-%    \end{columns}
-%\end{center}
-\end{frame}
-
-
-\begin{frame}
 \frametitle{Creating an OpenCL kernel}
 \begin{itemize}
     \item To compile your Lift kernel to OpenCL, run [opencl.executor]Compile(\textit{<kernel>}) 
@@ -170,7 +121,7 @@ However, functionality for new types of algorithms must be added in and tested. 
         \vspace{-.7cm}
         \begin{block}{}
         \begin{center}
-            \includegraphics[width=.5\textwidth]{../images/simpleCompile.png}
+            \includegraphics[width=.2\textwidth]{../images/simpleCompile.png}
         \end{center}
         \end{block}
     \item To execute the kernel straight away (compiling will happen behind the scenes), run [opencl.executor]Execute(\textit{<options>})[Array[\textit{type}](\textit{lambda}, \textit{..inputs..}) 
@@ -227,15 +178,15 @@ However, functionality for new types of algorithms must be added in and tested. 
 \vspace{-1.2cm}
 \end{frame}
 
-\begin{frame}{Convolutional Neural Network -- Parallel Implementation}
-\vspace{-1.5cm}
-    \begin{block}{}
-        \begin{center}
-            \includegraphics[width=0.8\textwidth]{../images/conv_expr_par.pdf}
-        \end{center}
-    \end{block}
-\vspace{-1.2cm}
-\end{frame}
+%\begin{frame}{Convolutional Neural Network -- Parallel Implementation}
+%\vspace{-1.5cm}
+%    \begin{block}{}
+%        \begin{center}
+%            \includegraphics[width=0.8\textwidth]{../images/conv_expr_par.pdf}
+%        \end{center}
+%    \end{block}
+%\vspace{-1.2cm}
+%\end{frame}
 
 \begin{frame}{Convolutional Neural Network -- OpenCL ND space}
 \vspace{-1.5cm}
@@ -254,18 +205,24 @@ However, functionality for new types of algorithms must be added in and tested. 
 \vspace{.2cm}
 \begin{itemize}
     \item Partial Differential Equations can be discritised into stencils to model physical simulations like 3D wave models 
-    \item A simple acoustics simulation shows how this can be done in Lift 
+    \item Room acoustics simulations have been explored extensively in Lift 
 \end{itemize}
 \vspace{-1.2cm}
-\end{frame}
-
-\begin{frame}{Acoustics Simulation Example Code}
         \begin{block}{}
-        \begin{center}
-            \includegraphics[width=\textwidth]{../images/acousticLambda.png}
+            \begin{center}
+            \vspace{.7cm}
+            \begin{center} \includegraphics[width=5.5cm]{../images/crosssection.pdf}\\\caption{\footnotesize{Cross Section of a 3D Concert Hall Model}}\end{center}
         \end{center}
         \end{block}
 \end{frame}
+
+%\begin{frame}{Acoustics Simulation Example Code}
+%        \begin{block}{}
+%        \begin{center}
+%            \includegraphics[width=\textwidth]{../images/acousticLambda.png}
+%        \end{center}
+%        \end{block}
+%\end{frame}
 
 \appendix
 
