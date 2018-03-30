@@ -25,13 +25,23 @@
 
 \title{Lift: The Language, The IR and Code Generation}
 \date{April 2nd, 2018}
-\author{\textbf{Naums Mogers}\\Based on (Steuwer, Remmelg, Dubach, 2017)}
+\author{\textbf{Naums Mogers}}
 \institute{University of Edinburgh}
 
 \begin{document}
 
 \begin{frame}[plain,noframenumbering]
 \maketitle
+\end{frame}
+
+\begin{frame}
+\frametitle{Table of contents}
+\begin{itemize}
+	\item Lift -- An Intermediate Language
+	\item Writing an Application
+	\item Lift Intermediate Representation
+	\item Lift Compilation
+\end{itemize}
 \end{frame}
 
 \section{\lift -- An Intermediate Language}
@@ -93,18 +103,15 @@
 \begin{columns}[onlytextwidth]
 \begin{column}{0.45\textwidth}
 \begin{itemize}
-	\item \code{mapWrg$^{0, 1, 2}$}
-	\item \code{mapLcl$^{0, 1, 2}$}
-	\item \code{mapGlb$^{0, 1, 2}$}
+	\item \code{mapWrg$(0-2)$}
+	\item \code{mapLcl$(0-2)$}
+	\item \code{mapGlb$(0-2)$}
 \end{itemize}
 \end{column}
 \begin{column}{0.45\textwidth}
 \begin{itemize}	
 	\item \code{mapWarp}
 	\item \code{mapLane}
-\vspace{.5cm}
-	\item \code{mapAtomWrg}
-	\item \code{mapAtomLcl}
 \end{itemize}
 \end{column}
 \end{columns}
@@ -149,7 +156,111 @@ All \lift primitives are either:
 \end{itemize}
 \end{frame}
 
-\section{\lift intermediate representation}
+\section{Writing an Application}
+
+\begin{frame}
+\frametitle{General Steps}
+\begin{itemize}
+    \item Determine input parameters 
+    \item Initialise input data 
+            \begin{itemize}
+                \item If testing, initialise comparison data 
+            \end{itemize}
+    \item Craft or translate the algorithm of interest 
+    \item Create an OpenCL kernel from your algorithm 
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Data Input to Lift Algorithms}
+\begin{itemize}
+    \item Lift can take in arrays or scalars as input parameters
+            \vspace{-1.2cm}
+\begin{block}{}
+    \begin{center}
+    \includegraphics[width=.5\textwidth]{../images/inputData.png}
+    \end{center}
+\end{block}
+    \item Single entry point for arrays into functions  
+            \begin{itemize}
+                \item Multiple arrays can be zipped together (but must be the same size!) 
+            \end{itemize}
+            \vspace{-1.5cm}
+\begin{block}{}
+    \begin{center}
+    \includegraphics[width=.5\textwidth]{../images/zippedData.png}
+    \end{center}
+\end{block}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Initialising Data in Scala}
+\begin{itemize}
+    \item Create arrays of data to pass into Lift algorithms in Scala 
+        \vspace{-.5cm}
+\begin{block}{}
+    \begin{center}
+         \includegraphics[width=.85\textwidth]{../images/scalaArrays.png}
+    \end{center}
+\end{block}
+    \item Our examples are all in unit tests, which include data to compare against - often from the same algorithm in Scala 
+        \vspace{-.5cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.8\textwidth]{../images/unitTestData.png}
+        \end{center}
+    \end{block}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Developing an Algorithm}
+The goal is not for Lift to be programmed in directly.\\
+\vspace{.1cm}
+However, functionality for new types of algorithms must be added in and tested. In doing so, there are a few things to keep in mind: 
+\begin{itemize}
+    \item Lift allows multiple inputs, but there is only one data entry point to the main algorithm (can contain tuples)
+    \item The algorithm itself must eventually map values back to global memory
+    \item The result will be returned in a single array (however, this array can also contain tuples)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Simple Example: 1D Jacobi Stencil}
+\begin{block}{}
+    \begin{center}
+    \includegraphics[width=.5\textwidth]{../images/jacobi1Dstencil.png}
+    \end{center}
+\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Creating an OpenCL kernel}
+\begin{itemize}
+    \item To compile your Lift kernel to OpenCL, run \code{[opencl.executor]Compile(<kernel>)}
+        \begin{itemize}
+                \item This kernel can then be saved as a string or file
+        \end{itemize}
+        \vspace{-.7cm}
+        \begin{block}{}
+        \begin{center}
+            \includegraphics[width=.2\textwidth]{../images/simpleCompile.png}
+        \end{center}
+        \end{block}
+    \item To execute the kernel straight away (compiling will happen behind the scenes), run \code{[opencl.executor]Execute(\textit{<options>})     \\
+        \hspace{0.5cm}[Array[\textit{type}]](\textit{lambda}, \textit{..inputs..})}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=\textwidth]{../images/execute.png}
+        \end{center}
+    \end{block}
+\end{itemize}
+\end{frame}
+
+
+
+\section{\lift Intermediate Representation}
 
 \begin{frame}
 \frametitle{Class diagram}
@@ -198,30 +309,12 @@ All \lift primitives are either:
         \end{center}
     \end{block}
 \end{frame}
-%image 
-
-\begin{frame}
-\frametitle{\lift type system}
-\begin{itemize}
-	\item Scalar types: \code{int}, \code{float}, etc
-	\item Vector types corresponding to OpenCL types \code{int2}, \code{float4}, etc
-	\item Tuples
-	\begin{itemize}
-		\item \textit{Represented as \code{structs} in the generated OpenCL code}
-	\end{itemize}
-	\item Arrays
-	\begin{itemize}
-		\item Can be nested
-		\item Carry information about the size and capacity of each dimension in their type
-		\item This information is represented by arithmetic expressions (more on this later)
-	\end{itemize}
-\end{itemize}
-\end{frame}
 
 \section{\lift compilation}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Compilation stages}
+    \vspace{-1cm}
     \begin{block}{}
         \begin{center}
             \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
@@ -247,21 +340,70 @@ All \lift primitives are either:
     \end{itemize}
 \end{itemize}
 \end{frame}
-% Code
 
-\begin{frame}
+\begin{frame}[t]
+\frametitle{\lift type system}
+    \vspace{-1cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
+        \end{center}
+        \vspace{-1.05cm}
+        \hspace{1.63cm}
+        \includegraphics[width=1cm, height=0.03cm]{../images/orange_bar.png}
+        \vspace{.45cm}
+    \end{block}
+    \vspace{-0.5cm}
+\begin{itemize}
+	\item Lift has a \textit{dependent} type system
+	\item Scalar types: \code{int}, \code{float}, etc
+	\item Vector types corresponding to OpenCL types \code{int2}, \code{float4}, etc
+	\item Tuples
+	\begin{itemize}
+		\item \textit{Represented as \code{structs} in the generated OpenCL code}
+	\end{itemize}
+	\item Arrays
+	\begin{itemize}
+		\item Can be nested
+		\item Carry information about the size and capacity of each dimension in their type
+		\item This information is represented by arithmetic expressions (more on this later)
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]
 \frametitle{Memory allocation}
+    \vspace{-1cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
+        \end{center}
+        \vspace{-1.05cm}
+        \hspace{3.36cm}
+        \includegraphics[width=1.1cm, height=0.03cm]{../images/orange_bar.png}
+        \vspace{.45cm}
+    \end{block}
+    \vspace{-0.5cm}
 \begin{itemize}
 	\item The naive approach would be to allocate a new output buffer for every \code{FunCall} AST node
 	\item We only allocate memory to the nodes where the called function contains a \code{UserFun}
-	\item The size of the memory to allocate is inferred from the array length (or the associated \code{View})
 	\item The address space is inferred from \code{FunCall}
 \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Memory allocation}
     \vspace{-1cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
+        \end{center}
+        \vspace{-1.05cm}
+        \hspace{3.36cm}
+        \includegraphics[width=1.1cm, height=0.03cm]{../images/orange_bar.png}
+        \vspace{.45cm}
+    \end{block}
+    \vspace{-1.7cm}
     \begin{block}{}
         \begin{center}
             \includegraphics[width=0.47\textwidth]{../images/address_space.pdf}
@@ -269,8 +411,19 @@ All \lift primitives are either:
     \end{block}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Array accesses}
+    \vspace{-1cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
+        \end{center}
+        \vspace{-1.05cm}
+        \hspace{5.2cm}
+        \includegraphics[width=.95cm, height=0.03cm]{../images/orange_bar.png}
+        \vspace{.45cm}
+    \end{block}
+    \vspace{-0.5cm}
 \begin{itemize}
 	\item In \lift IR, arrays are accessed implicitly based on the patterns
 	\item This eliminates arbitrary memory accesses and the associated problems
@@ -279,8 +432,19 @@ All \lift primitives are either:
 \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Barrier elimination}
+    \vspace{-1cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
+        \end{center}
+        \vspace{-1.05cm}
+        \hspace{6.9cm}
+        \includegraphics[width=1.25cm, height=0.03cm]{../images/orange_bar.png}
+        \vspace{.45cm}
+    \end{block}
+    \vspace{-0.5cm}
 \begin{itemize}
 	\item We start by synchronizing after each occurrence of a parallel \code{Map}
 	\item Then we remove barriers one by one in cases when it can be inferred that they are not required
@@ -291,8 +455,19 @@ All \lift primitives are either:
 \end{itemize}
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{OpenCL code generation}
+    \vspace{-1cm}
+    \begin{block}{}
+        \begin{center}
+            \includegraphics[width=1\textwidth]{../images/compilation_stages.pdf}
+        \end{center}
+        \vspace{-1.05cm}
+        \hspace{8.9cm}
+        \includegraphics[width=1.57cm, height=0.03cm]{../images/orange_bar.png}
+        \vspace{.45cm}
+    \end{block}
+    \vspace{-0.5cm}
 \begin{itemize}
 	\item The AST is traversed recursively
 	\item No OpenCL code is generated for the patterns that only affect \code{View}
@@ -301,13 +476,10 @@ All \lift primitives are either:
 \end{frame}
 
 \begin{frame}
-\frametitle{References}
-\begin{itemize}
-	\item \texttt{Steuwer, Michel, Toomas Remmelg, and Christophe Dubach. "Lift: a functional data-parallel IR for high-performance GPU code generation." Code Generation and Optimization (CGO), 2017 IEEE/ACM International Symposium on. IEEE, 2017.}
-	\item \texttt{Steuwer, Michel, Toomas Remmelg, and Christophe Dubach. "Matrix multiplication beyond auto-tuning: Rewrite-based GPU code generation." Compliers, Architectures, and Sythesis of Embedded Systems (CASES), 2016 International Conference on. IEEE, 2016.}
-\end{itemize}
+\frametitle{The end}
 \begin{center}
-\textcolor{blue}{\url{http://www.lift-project.org/}}
+Slides are available at
+\textcolor{blue}{\url{http://www.lift-project.org/ispass2018}}
 \end{center}
 \end{frame}
 
