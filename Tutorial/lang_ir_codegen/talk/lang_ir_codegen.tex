@@ -1,4 +1,4 @@
-\documentclass[10pt]{beamer}
+\documentclass[10pt,usetotalslideindicator]{beamer}
 
 \usetheme{metropolis}
 %\metroset{background=dark}
@@ -25,7 +25,7 @@
 
 \title{Lift: The Language, The IR and Code Generation}
 \date{April 2nd, 2018}
-\author{\textbf{Naums Mogers}}
+\author{\textbf{Naums Mogers, Larisa Stoltzfus}}
 \institute{University of Edinburgh}
 
 \begin{document}
@@ -36,12 +36,21 @@
 
 \begin{frame}
 \frametitle{Table of contents}
-\begin{itemize}
-	\item Lift -- An Intermediate Language
-	\item Writing an Application
-	\item Lift Intermediate Representation
-	\item Lift Compilation
-\end{itemize}
+\begin{enumerate}
+	\item \lift -- An Intermediate Language\\
+	\
+	\item Writing a \lift Application\\
+	\
+	\item \lift Intermediate Representation\\
+	\
+	\item \lift Compilation
+\end{enumerate}
+    \vspace{1cm}
+\begin{center}
+Source code, installation manual and slides are available at
+\textcolor{blue}{\url{http://www.lift-project.org/ispass2018}}
+\end{center}
+
 \end{frame}
 
 \section{\lift -- An Intermediate Language}
@@ -402,11 +411,9 @@ However, functionality for new types of algorithms must be added in and tested. 
         \hspace{3.36cm}
         \includegraphics[width=1.1cm, height=0.03cm]{../images/orange_bar.png}
         \vspace{.45cm}
-    \end{block}
-    \vspace{-1.7cm}
-    \begin{block}{}
+    \vspace{-.8cm}
         \begin{center}
-            \includegraphics[width=0.47\textwidth]{../images/address_space.pdf}
+            \includegraphics[width=0.38\textwidth]{../images/address_space.pdf}
         \end{center}
     \end{block}
 \end{frame}
@@ -427,7 +434,8 @@ However, functionality for new types of algorithms must be added in and tested. 
 \begin{itemize}
 	\item In \lift IR, arrays are accessed implicitly based on the patterns
 	\item This eliminates arbitrary memory accesses and the associated problems
-	\item However, expressing (efficient) pattern-transformed accesses is not obvious
+	\item However, expressing (efficient) pattern-transformed accesses is not obvious\\
+	\ 
 	\item ...which is where \code{Views} come to the rescue (but more on that later)
 \end{itemize}
 \end{frame}
@@ -446,10 +454,13 @@ However, functionality for new types of algorithms must be added in and tested. 
     \end{block}
     \vspace{-0.5cm}
 \begin{itemize}
-	\item We start by synchronizing after each occurrence of a parallel \code{Map}
-	\item Then we remove barriers one by one in cases when it can be inferred that they are not required
+	\item We start by synchronizing after each occurrence of a parallel \code{Map}\\
+	\
+	\item Then we remove barriers one by one wherever we can infer that they are not required:\\
+	\
 	\begin{itemize}
-		\item When the data is not shared (i.e. \code{Split}, \code{Join}, \code{Gather} and \code{Scatter} are not used)
+		\item When data is not shared (i.e. \code{Split}, \code{Join}, \code{Gather} and \code{Scatter} are not used)\\
+		\
 		\item When the two parallel \code{Maps} are executed independently in separate branches of \code{Zip}
 	\end{itemize}
 \end{itemize}
@@ -469,8 +480,10 @@ However, functionality for new types of algorithms must be added in and tested. 
     \end{block}
     \vspace{-0.5cm}
 \begin{itemize}
-	\item The AST is traversed recursively
-	\item No OpenCL code is generated for the patterns that only affect \code{View}
+	\item The AST is traversed recursively\\
+	\
+	\item No OpenCL code is generated for the patterns that only affect \code{View}\\
+	\
 	\item Low-level optimizations such as loop unrolling are applied to simplify the control flow using the information on \textit{ranges} inferred from the patterns such as \code{mapLcl}
 \end{itemize}
 \end{frame}
@@ -478,7 +491,7 @@ However, functionality for new types of algorithms must be added in and tested. 
 \begin{frame}
 \frametitle{The end}
 \begin{center}
-Slides are available at
+Source code, installation manual and slides are available at
 \textcolor{blue}{\url{http://www.lift-project.org/ispass2018}}
 \end{center}
 \end{frame}
