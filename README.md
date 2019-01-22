@@ -1,6 +1,10 @@
 # Presentations
 Slides of presentations about the Lift language
 
+## 2019
+
+- Talk by _Naums Mogers_: [**Towards Mapping Lift to Deep Neural Network Accelerators**](http://www.lift-project.org/presentations/2019/EDLA-2019.pdf), at [*the Workshop on Emerging Deep Learning Accelerators (EDLA) 2019 @ HiPEAC*](https://www.hipeac.net/2019/valencia/#/schedule/sessions/7627/) in Valencia, Spain, 21/01/2019.
+
 ## 2018
 
 - Talk by _Bastian Hagedorn_: [**High Performance Stencil Code Generation with Lift**](http://www.lift-project.org/presentations/2018/CGO-2018.pdf), at the [*International Symposium on Code Generation and Optimization (CGO) 2017*](http://cgo.org/cgo2018/) in Vienna, Austria, 26/02/2018.
