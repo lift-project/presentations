@@ -3,6 +3,8 @@ Slides of presentations about the Lift language
 
 ## 2019
 
+- Talk by _Naums Mogers_: [**Functional Interface for Performance Portability on Parallel Accelerators**](http://www.lift-project.org/presentations/2019/ARM-Research-Summit-2019.pdf), at [*the "Renegotiating Accelerator Abstractions (Post-Moore's Law)" workshop @ ARM Research Summit 2019*](https://polyarch.github.io/arm-workshop/) in Austin, Texas, USA, 15/09/2019.
+
 - Talk by _Naums Mogers_: [**Towards Mapping Lift to Deep Neural Network Accelerators**](http://www.lift-project.org/presentations/2019/EDLA-2019.pdf), at [*the Workshop on Emerging Deep Learning Accelerators (EDLA) 2019 @ HiPEAC*](https://www.hipeac.net/2019/valencia/#/schedule/sessions/7627/) in Valencia, Spain, 21/01/2019.
 
 ## 2018
